@@ -1,16 +1,3 @@
-# flatten
-
-Flatten is a package to flatten a Struct, a Map or a mix of them to a flattened *key-value* 2D matrix.
- 
-Useful to convert structs to 2D Matrices prior storing them in a *row column like* database like MySQL or Cassandra.
-
-## Limitations
-
-* Does not support arrays
-
-## Example use
-
-```go
 package main
 
 import (
@@ -42,14 +29,14 @@ func main() {
 		City: "Madrid",
 		ContactMethods: map[string]string{
 			"Phone": "1234",
-			"email": "mariocaster@gmail.com",
+			"email": "aaaa@aaaa.com",
 		},
 		ExtraInfo: Extra{
 			FavoriteSport: "Road Cycling",
 		},
 		PersonalData: PersonalData{
-			Name:    "Mario",
-			Surname: "Castro",
+			Name:    "sayden",
+			Surname: "A surname",
 			Age:     32,
 			Weight:  83.5,
 		},
@@ -67,24 +54,9 @@ func main() {
 	}
 
 	mi := flatten.NewIterator(m)
-	k, v, finished = mi.Next()
+	k, b, finished := mi.NextBytes()
 	for !finished {
-		fmt.Printf("%s -> %v\n", k, v)
-		k, v, finished = mi.Next()
+		fmt.Printf("%s -> %s\n", k, string(b))
+		k, b, finished = mi.NextBytes()
 	}
 }
-```
-
-Outputs
-
-```bash
-City -> Madrid
-PersonalData.Name -> Sayden
-PersonalData.Surname -> A surname
-PersonalData.Age -> 32
-PersonalData.Weight -> 83.5
-ContactMethods.email -> aaaa@aaaa.com
-ContactMethods.Phone -> 1234
-ExtraInfo.FavoriteSport -> Road Cycling
-Hello -> World
-```
