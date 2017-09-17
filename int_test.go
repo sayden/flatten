@@ -3,6 +3,7 @@ package flatten
 import (
 	"fmt"
 	"github.com/stretchr/testify/assert"
+	"math"
 	"math/rand"
 	"testing"
 	"time"
@@ -82,13 +83,45 @@ func Test_Fraud_BytesOps(t *testing.T) {
 
 	})
 
+	t.Run("Reduce bytes array size", func(t *testing.T) {
+		n := 5
+		byt := intToBytes(n)
+		assert.Equal(t, []byte{5}, byt)
+		assert.Equal(t, n, intFromBytes(byt))
+	})
+
+	t.Run("Negative numbers and big ops", func(t *testing.T) {
+		n := math.MinInt64
+		byt := intToBytes(n)
+		assert.Equal(t, n, intFromBytes(byt))
+
+		var n8 int8 = math.MinInt8
+		byt = int8ToBytes(n8)
+		assert.Equal(t, n8, int8FromBytes(byt))
+
+		var n16 int16 = math.MinInt16
+		byt = int16ToBytes(n16)
+		assert.Equal(t, n16, int16FromBytes(byt))
+
+		var n32 int32 = math.MinInt32
+		byt = int32ToBytes(n32)
+		assert.Equal(t, n32, int32FromBytes(byt))
+
+		var n64 int64 = math.MinInt64
+		byt = int64ToBytes(n64)
+		assert.Equal(t, n64, int64FromBytes(byt))
+
+		n64 = math.MaxInt64
+		byt = int64ToBytes(n64)
+		assert.Equal(t, n64, int64FromBytes(byt))
+	})
+
 }
 
 func Test_IntToBytes(t *testing.T) {
 	var n int = 33
 
 	byt := intToBytes(n)
-	fmt.Println(byt)
 	assert.Equal(t, uint8(33), byt[len(byt)-1])
 }
 

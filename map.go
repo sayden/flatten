@@ -134,7 +134,7 @@ iterating:
 	}
 
 	key := st.keys[st.cur]
-	v := st.v.MapIndex(key)
+	val := st.v.MapIndex(key)
 
 	if st.prefix != "" {
 		s = fmt.Sprintf("%s.%s", st.prefix, key.String())
@@ -142,37 +142,45 @@ iterating:
 		s = key.String()
 	}
 
-	switch v.Kind() {
+	switch val.Kind() {
 	case reflect.Map:
-		st.interfaceIter = newMapIterator(v.Interface(), s)
+		st.interfaceIter = newMapIterator(val.Interface(), s)
 		st.iterating = true
 		goto iterating
 	case reflect.Struct:
-		numFields := v.NumField()
+		fmt.Println(val.String())
+		numFields := val.NumField()
 		var valid bool
 		for i := 0; i < numFields; i++ {
-			if v.Field(i).IsValid() {
+			if val.Field(i).IsValid() {
 				valid = true
 			}
 		}
 
 		if !valid {
-			i = bytes(v.Interface())
+			str := val.MethodByName("String")
+			if str.IsValid() {
+				values := str.Call([]reflect.Value{})
+				i = []byte(values[0].String())
+				st.cur++
+				return
+			}
+			//i = bytes(v.Interface())
 			st.cur++
 			return
 		}
 
-		st.interfaceIter = newStructIterator(v.Interface(), s)
+		st.interfaceIter = newStructIterator(val.Interface(), s)
 		st.iterating = true
 		goto iterating
 
 	default:
-		if !v.IsValid() {
+		if !val.IsValid() {
 			st.cur++
 			goto next
 		}
 
-		i = bytes(v.Interface())
+		i = bytes(val.Interface())
 		if i == nil {
 			st.cur++
 			goto next

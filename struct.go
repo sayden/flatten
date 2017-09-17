@@ -154,7 +154,14 @@ iterating:
 		}
 
 		if !valid {
-			i = bytes(val.Interface())
+			str := val.MethodByName("String")
+			if str.IsValid() {
+				values := str.Call([]reflect.Value{})
+				i = []byte(values[0].String())
+				st.cur++
+				return
+			}
+			//i = bytes(val.Interface())
 			st.cur++
 			return
 		}
