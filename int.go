@@ -2,7 +2,6 @@ package flatten
 
 import (
 	"encoding/binary"
-	"runtime"
 )
 
 func int8FromBytes(byt []byte) int8 {
@@ -22,15 +21,6 @@ func int64FromBytes(byt []byte) int64 {
 }
 
 func intFromBytes(byt []byte) int {
-	if runtime.GOARCH == "amd64" {
-		if len(byt) != 8 {
-			prefix := make([]byte, 8-len(byt))
-			return int(binary.BigEndian.Uint64(append(prefix, byt...)))
-		}
-
-		return int(binary.BigEndian.Uint64(byt))
-	}
-
 	if len(byt) != 4 {
 		prefix := make([]byte, 4-len(byt))
 		return int(binary.BigEndian.Uint32(append(prefix, byt...)))

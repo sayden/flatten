@@ -7,7 +7,6 @@ import (
 
 	"github.com/kr/pretty"
 	"github.com/stretchr/testify/assert"
-	"fmt"
 )
 
 type crazyType struct {

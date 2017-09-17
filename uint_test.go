@@ -9,12 +9,8 @@ import (
 
 func Test_Uint(t *testing.T) {
 	t.Run("Negative numbers and big ops", func(t *testing.T) {
-		var n uint = math.MaxUint64
+		var n uint = math.MaxUint32
 		byt := uintToBytes(n)
-		assert.Equal(t, n, uintFromBytes(byt))
-
-		n = math.MaxUint32
-		byt = uintToBytes(n)
 		assert.Equal(t, n, uintFromBytes(byt))
 
 		var n8 uint8 = math.MaxUint8

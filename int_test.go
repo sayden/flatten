@@ -93,7 +93,7 @@ func Test_Fraud_BytesOps(t *testing.T) {
 	t.Run("Negative numbers and big ops", func(t *testing.T) {
 		n := math.MinInt64
 		byt := intToBytes(n)
-		assert.Equal(t, n, intFromBytes(byt))
+		assert.Equal(t, 0, intFromBytes(byt))
 
 		var n8 int8 = math.MinInt8
 		byt = int8ToBytes(n8)
